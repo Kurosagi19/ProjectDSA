@@ -1,0 +1,142 @@
+import sun.security.krb5.internal.KdcErrException;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+public class Order{
+    private static Scanner sc = new Scanner(System.in);
+    private int id;
+    private String date;
+    private String custName;
+    private String custPhone;
+    private int totalAmount;
+    private boolean status = false;
+    private List<OrderItem> itemList;
+
+    public Order() {
+    }
+
+    public Order(int id, String date, String custName, String custPhone) {
+        this.id = id;
+        this.date = date;
+        this.custName = custName;
+        this.custPhone = custPhone;
+        this.itemList = new ArrayList<>();
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getCustName() {
+        return custName;
+    }
+
+    public void setCustName(String custName) {
+        this.custName = custName;
+    }
+
+    public String getCustPhone() {
+        return custPhone;
+    }
+
+    public void setCustPhone(String custPhone) {
+        this.custPhone = custPhone;
+    }
+
+    public int getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setTotalAmount(int totalAmount) {
+        this.totalAmount = totalAmount;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+
+    public List<OrderItem> getItemList() {
+        return itemList;
+    }
+
+    public void setItemList(List<OrderItem> itemList) {
+        this.itemList = itemList;
+    }
+
+
+    public void calcTotal() {
+        // Tính tổng tiền
+        for (OrderItem orderItem: itemList) {
+            totalAmount += orderItem.getItem().getPrice() * orderItem.getQuantity();
+        }
+    }
+    public void addOrder() {
+        System.out.print("Nhập id hoá đơn: ");
+        id = sc.nextInt();
+        System.out.print("Ngày tạo hoá đơn: ");
+        date = sc.nextLine();
+        sc.nextLine();
+        System.out.print("Tên khách hàng: ");
+        custName = sc.nextLine();
+        System.out.print("Số điện thoại khách hàng: ");
+        custPhone = sc.nextLine();
+//        System.out.print("Nhập số sản phẩm cần thêm: ");
+//        int p = sc.nextInt();
+//        for(int i = 0; i < p; i++) {
+//            OrderItem orderItem = new OrderItem();
+//            System.out.print("Nhập id sản phẩm: ");
+//            orderItem.setId();
+//        }
+        Order order = new Order(id, date, custName, custPhone);
+        Product p1 = new Product(1, "Product 1", 1000);
+        Product p2 = new Product(2, "Product 2", 2000);
+        Product p3 = new Product(3, "Product 3", 3000);
+        Product p4 = new Product(4, "Product 4", 4000);
+        Product p5 = new Product(5, "Product 5", 5000);
+        order.getItemList().add(new OrderItem(1, p1, 3));
+        order.getItemList().add(new OrderItem(2, p2, 3));
+        order.calcTotal();
+
+        QueueADT<Order> orders = new QueueADTImpl<>(100);
+        orders.enqueue(order);
+    }
+
+    public void printOrder() {
+        // Hiển thị tất cả order
+        System.out.println("----------------------");
+        System.out.println("Order -- " + id);
+        System.out.printf("Customer -- [%s - %s] \n", custName, custPhone);
+        System.out.println("Total amount: " + totalAmount);
+        System.out.println("Status: " + (status == true ? "Approved" : "Pending"));
+        // Danh sách sản phẩm trong order
+        // Mã sản phẩm - Tên sản phẩm - Giá - Số lượng - Thành tiền
+        System.out.println("ID\tProduct\tPrice\tQuantity\tAmount");
+        for (OrderItem orderItem : itemList) {
+            System.out.print(orderItem.getItem().getId() + "\t");
+            System.out.print(orderItem.getItem().getName() + "\t");
+            System.out.print(orderItem.getItem().getPrice() + "\t");
+            System.out.print(orderItem.getQuantity() + "\t");
+            System.out.print(orderItem.getItem().getPrice() * orderItem.getQuantity());
+            System.out.println();
+        }
+    }
+}
