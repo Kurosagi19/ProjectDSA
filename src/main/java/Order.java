@@ -99,23 +99,7 @@ public class Order{
         custName = sc.nextLine();
         System.out.print("Số điện thoại khách hàng: ");
         custPhone = sc.nextLine();
-//        System.out.print("Nhập số sản phẩm cần thêm: ");
-//        int p = sc.nextInt();
-//        for(int i = 0; i < p; i++) {
-//            OrderItem orderItem = new OrderItem();
-//            System.out.print("Nhập id sản phẩm: ");
-//            orderItem.setId();
-//        }
         Order order = new Order(id, date, custName, custPhone);
-        Product p1 = new Product(1, "Product 1", 1000);
-        Product p2 = new Product(2, "Product 2", 2000);
-        Product p3 = new Product(3, "Product 3", 3000);
-        Product p4 = new Product(4, "Product 4", 4000);
-        Product p5 = new Product(5, "Product 5", 5000);
-        order.getItemList().add(new OrderItem(1, p1, 3));
-        order.getItemList().add(new OrderItem(2, p2, 3));
-        order.calcTotal();
-
         QueueADT<Order> orders = new QueueADTImpl<>(100);
         orders.enqueue(order);
     }
@@ -123,20 +107,24 @@ public class Order{
     public void printOrder() {
         // Hiển thị tất cả order
         System.out.println("----------------------");
-        System.out.println("Order -- " + id);
-        System.out.printf("Customer -- [%s - %s] \n", custName, custPhone);
-        System.out.println("Total amount: " + totalAmount);
-        System.out.println("Status: " + (status == true ? "Approved" : "Pending"));
-        // Danh sách sản phẩm trong order
+        System.out.println("Hoá đơn thứ " + id);
+        System.out.printf("Khách hàng -- [%s - %s] \n", custName, custPhone);
+        System.out.println("Tổng tiền: " + totalAmount);
+        System.out.println("Trạng thái đơn: " + (status == true ? "Đã duyệt" : "Chờ duyệt"));
+        // Danh sách sản phẩm trong hoá đơn
         // Mã sản phẩm - Tên sản phẩm - Giá - Số lượng - Thành tiền
-        System.out.println("ID\tProduct\tPrice\tQuantity\tAmount");
-        for (OrderItem orderItem : itemList) {
-            System.out.print(orderItem.getItem().getId() + "\t");
-            System.out.print(orderItem.getItem().getName() + "\t");
-            System.out.print(orderItem.getItem().getPrice() + "\t");
-            System.out.print(orderItem.getQuantity() + "\t");
-            System.out.print(orderItem.getItem().getPrice() * orderItem.getQuantity());
-            System.out.println();
+        try {
+            System.out.println("ID\tSản phẩm\t\tĐơn giá\t\tSố lượng\t\tThành tiền");
+            for (OrderItem orderItem : itemList) {
+                System.out.print(orderItem.getItem().getId() + "\t");
+                System.out.print(orderItem.getItem().getName() + "\t");
+                System.out.print(orderItem.getItem().getPrice() + "\t");
+                System.out.print(orderItem.getQuantity() + "\t");
+                System.out.print(orderItem.getItem().getPrice() * orderItem.getQuantity());
+                System.out.println();
+            }
+        } catch (Exception e) {
+            System.out.println("Không có sản phẩm trong hoá đơn!");
         }
     }
 }
