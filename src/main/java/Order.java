@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class Order{
+public class Order {
     private static Scanner sc = new Scanner(System.in);
     private int id;
     private String date;
@@ -105,11 +105,11 @@ public class Order{
     }
 
     public void status() {
-        QueueADT<Order> orderQueueADT = new QueueADTImpl<>(100);
-        while (!orderQueueADT.isEmpty()) {
-            Order o = orderQueueADT.dequeue();
-            o.setStatus(true);
-        }
+        System.out.println("Chức năng đang phát triển. COOK!");
+    }
+
+    public void searchOrder() {
+        System.out.println("Chức năng đang phát triển. COOK!");
     }
 
     public void printOrder() {

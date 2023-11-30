@@ -21,7 +21,7 @@ public class main {
                             case 1:
                             int prdId;
                             do {
-                                order.getItemList();
+//                                order.getItemList();
                                 System.out.print("Nhập id sản phẩm từ 1 đến 5 (nhập 0 để thoát): ");
                                 prdId = sc.nextInt();
                                 int x = 0;
