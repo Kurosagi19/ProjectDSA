@@ -104,6 +104,14 @@ public class Order{
         orders.enqueue(order);
     }
 
+    public void status() {
+        QueueADT<Order> orderQueueADT = new QueueADTImpl<>(100);
+        while (!orderQueueADT.isEmpty()) {
+            Order o = orderQueueADT.dequeue();
+            o.setStatus(true);
+        }
+    }
+
     public void printOrder() {
         // Hiển thị tất cả order
         System.out.println("----------------------");

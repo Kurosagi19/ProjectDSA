@@ -43,6 +43,7 @@ public class main {
                     } while (pChoice != 0);
                     break;
                 case 2:
+                    order.status();
                     mainMenu();
                     break;
                 case 3:
