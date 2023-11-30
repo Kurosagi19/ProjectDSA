@@ -27,7 +27,7 @@ public class main {
                                 int x = 0;
                                 for (int i = 1; i <= 5; i++) {
                                     if (prdId == i) {
-
+                                        // Code thêm sản phẩm vào hoá đơn đang tạo
                                     }
                                 }
                                 if (x == 0 && prdId <= 0 || x == 0 && prdId >= 6) {
