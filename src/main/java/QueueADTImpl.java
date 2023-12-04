@@ -39,6 +39,7 @@ public class QueueADTImpl <T> implements QueueADT<T> {
         return items.get(0);
     }
 
+    @Override
     public int size() {
         return items.size();
     }

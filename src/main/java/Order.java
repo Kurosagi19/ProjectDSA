@@ -1,6 +1,3 @@
-import sun.security.krb5.internal.KdcErrException;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -83,6 +80,8 @@ public class Order {
     }
 
 
+
+
     public void calcTotal() {
         // Tính tổng tiền
         for (OrderItem orderItem: itemList) {
@@ -92,24 +91,33 @@ public class Order {
     public void addOrder() {
         System.out.print("Nhập id hoá đơn: ");
         id = sc.nextInt();
+        sc.nextLine();
         System.out.print("Ngày tạo hoá đơn: ");
         date = sc.nextLine();
-        sc.nextLine();
         System.out.print("Tên khách hàng: ");
         custName = sc.nextLine();
         System.out.print("Số điện thoại khách hàng: ");
         custPhone = sc.nextLine();
         Order order = new Order(id, date, custName, custPhone);
-        QueueADT<Order> orders = new QueueADTImpl<>(100);
-        orders.enqueue(order);
     }
 
-    public void status() {
+    public void statusUpdate() {
+        System.out.println("Chức năng đang phát triển. COOK!");
+    }
+
+    public void orderSort() {
         System.out.println("Chức năng đang phát triển. COOK!");
     }
 
     public void searchOrder() {
-        System.out.println("Chức năng đang phát triển. COOK!");
+        int s;
+        System.out.print("Nhập mã hoá đơn cần tìm: ");
+        s = sc.nextInt();
+        for (int i = 1; i <= 2; i++) {
+            if (s == getId()) {
+                printOrder();
+            }
+        }
     }
 
     public void printOrder() {
