@@ -5,6 +5,7 @@ import java.util.Scanner;
 public class main {
     public static Scanner sc = new Scanner(System.in);
     private static Product prd;
+
     public static void main(String[] args) {
         Product p1 = new Product(1, "Product 1", 1000);
         Product p2 = new Product(2, "Product 2", 2000);
@@ -13,8 +14,7 @@ public class main {
         prd.getPrdList().add(p2);
         prd.getPrdList().add(p3);
 
-        Order order = new Order();
-        QueueADT<Order> orders = new QueueADTImpl<>(100);
+        Order order = new Order(1, "05/12/2023", "Nguyen Duc Anh", "0965241610");
         mainMenu();
         int choice;
         do {
@@ -28,34 +28,34 @@ public class main {
                     do {
                         productMenu();
                         pChoice = sc.nextInt();
-                        switch(pChoice) {
+                        switch (pChoice) {
                             case 1:
-                            int prdId;
-                            int quantity;
-                            do {
-                                getPrdList();
-                                System.out.print("Nhập id sản phẩm từ 1 đến 5 (nhập 0 để thoát): ");
-                                prdId = sc.nextInt();
-                                System.out.print("Nhập số lượng: ");
-                                quantity = sc.nextInt();
-                                if (prdId == 0) {
-                                    mainMenu();
-                                }
-                                for (int i = 1; i <= 5; i++) {
-                                    for (Product p : prd.getPrdList()) {
-                                        if (prdId == i) {
-                                            order.getItemList().add(new OrderItem(i, p, quantity));
+                                int prdId;
+                                int quantity;
+                                do {
+                                    getPrdList();
+                                    System.out.print("Nhập id sản phẩm từ 1 đến 5 (nhập 0 để thoát): ");
+                                    prdId = sc.nextInt();
+                                    if (prdId == 0) {
+                                        mainMenu();
+                                    } else {
+                                        System.out.print("Nhập số lượng: ");
+                                        quantity = sc.nextInt();
+                                            for (Product p : prd.getPrdList()) {
+                                                if (prdId == p.getId()) {
+                                                    order.getItemList().add(new OrderItem(prdId, p, quantity));
+                                                }
+                                            }
+                                        if (prdId < 0 || prdId >= 6) {
+                                            System.out.println("Mã sản phẩm không hợp lệ. Mời nhập lại: ");
                                         }
                                     }
-                                }
-                                if (prdId < 0 || prdId >= 6) {
-                                    System.out.println("Mã sản phẩm không hợp lệ. Mời nhập lại: ");
-                                }
-                            } while (prdId != 0);
-                            order.calcTotal();
-                            pChoice = 0;
-                            break;
+                                } while (prdId != 0);
+                                order.calcTotal();
+                                pChoice = 0;
+                                break;
                             case 0:
+                                mainMenu();
                                 break;
                         }
                     } while (pChoice != 0);

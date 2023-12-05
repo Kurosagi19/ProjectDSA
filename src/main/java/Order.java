@@ -12,9 +12,6 @@ public class Order {
     private boolean status = false;
     private List<OrderItem> itemList;
 
-    public Order() {
-    }
-
     public Order(int id, String date, String custName, String custPhone) {
         this.id = id;
         this.date = date;
@@ -99,14 +96,18 @@ public class Order {
         System.out.print("Số điện thoại khách hàng: ");
         custPhone = sc.nextLine();
         Order order = new Order(id, date, custName, custPhone);
+        QueueADT<Order> orderQueueADT = new QueueADTImpl<>(100);
+        orderQueueADT.enqueue(order);
     }
 
     public void statusUpdate() {
-        System.out.println("Chức năng đang phát triển. COOK!");
-    }
-
-    public void orderSort() {
-        System.out.println("Chức năng đang phát triển. COOK!");
+        QueueADT<Order> orders = new QueueADTImpl<>(100);
+        for(Order order : orders) {
+            if (order.getId() == id) {
+                order.setStatus(true);
+                break;
+            }
+        }
     }
 
     public void searchOrder() {
@@ -128,14 +129,13 @@ public class Order {
         System.out.println("Tổng tiền: " + totalAmount);
         System.out.println("Trạng thái đơn: " + (status == true ? "Đã duyệt" : "Chờ duyệt"));
         // Danh sách sản phẩm trong hoá đơn
-        // Mã sản phẩm - Tên sản phẩm - Giá - Số lượng - Thành tiền
         try {
-            System.out.println("ID\tSản phẩm\t\tĐơn giá\t\tSố lượng\t\tThành tiền");
+            System.out.println("ID\tSản phẩm\tĐơn giá\tSố lượng\tThành tiền");
             for (OrderItem orderItem : itemList) {
                 System.out.print(orderItem.getItem().getId() + "\t");
                 System.out.print(orderItem.getItem().getName() + "\t");
                 System.out.print(orderItem.getItem().getPrice() + "\t");
-                System.out.print(orderItem.getQuantity() + "\t");
+                System.out.print(orderItem.getQuantity() + "\t\t\t");
                 System.out.print(orderItem.getItem().getPrice() * orderItem.getQuantity());
                 System.out.println();
             }
