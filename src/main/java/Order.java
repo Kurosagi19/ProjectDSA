@@ -1,6 +1,8 @@
 import java.util.*;
 
-public class Order{
+import static java.util.Comparator.comparing;
+
+public class Order {
     private static Scanner sc = new Scanner(System.in);
     private int id;
     private String date;
@@ -9,11 +11,8 @@ public class Order{
     private int totalAmount;
     private boolean status = false;
     private List<OrderItem> itemList;
-
     private static Product prd;
-
-    public Order() {
-    }
+    static List<Order> orderList;
 
     public Order(int id, String date, String custName, String custPhone) {
         this.id = id;
@@ -21,6 +20,24 @@ public class Order{
         this.custName = custName;
         this.custPhone = custPhone;
         this.itemList = new ArrayList<>();
+        this.orderList = new ArrayList<>();
+    }
+
+    public Order(int id, String date, String custName, String custPhone, int totalAmount, List<OrderItem> itemList) {
+        this.id = id;
+        this.date = date;
+        this.custName = custName;
+        this.custPhone = custPhone;
+        this.totalAmount = totalAmount;
+        this.itemList = itemList;
+    }
+
+    public static List<Order> getOrderList() {
+        return orderList;
+    }
+
+    public static void setOrderList(List<Order> orderList) {
+        Order.orderList = orderList;
     }
 
     public int getId() {
@@ -79,62 +96,12 @@ public class Order{
         this.itemList = itemList;
     }
 
+
     public void calcTotal() {
         // Tính tổng tiền
-        for (OrderItem orderItem: itemList) {
+        for (OrderItem orderItem : itemList) {
             totalAmount += orderItem.getItem().getPrice() * orderItem.getQuantity();
         }
-    }
-    public void addOrder() {
-
-        System.out.print("Nhập id hoá đơn: ");
-        int id = sc.nextInt();
-        sc.nextLine();
-        System.out.print("Ngày tạo hoá đơn: ");
-        String date = sc.nextLine();
-        System.out.print("Tên khách hàng: ");
-        String custName = sc.nextLine();
-        System.out.print("Số điện thoại khách hàng: ");
-        String custPhone = sc.nextLine();
-        Order order = new Order(id, date, custName, custPhone);
-        int pChoice;
-        do {
-
-            main.productMenu();
-            pChoice = sc.nextInt();
-            switch (pChoice) {
-                case 1:
-                    int prdId;
-                    int quantity;
-                    do {
-                        main.getPrdList();
-                        System.out.print("Nhập id sản phẩm (nhập 0 để thoát): ");
-                        prdId = sc.nextInt();
-                        if (prdId == 0) {
-                            main.mainMenu();
-                        } else {
-                            System.out.print("Nhập số lượng: ");
-                            quantity = sc.nextInt();
-                            for (Product p : prd.getPrdList()) {
-                                if (prdId == p.getId()) {
-                                    order.getItemList().add(new OrderItem(prdId, p, quantity));
-                                }
-                            }
-                            if (prdId < 0 || prdId >= 6) {
-                                System.out.println("Mã sản phẩm không hợp lệ. Mời nhập lại: ");
-                            }
-                        }
-                    } while (prdId != 0);
-                    order.calcTotal();
-                    QueueADT<Order> orderQueueADT = new QueueADTImpl<>(100);
-                    orderQueueADT.enqueue(order);
-                    pChoice = 0;
-                    break;
-                case 0:
-                    main.mainMenu();
-                    break;
-            }
-        } while (pChoice != 0);
     }
 
     public void statusUpdate() {
@@ -145,14 +112,15 @@ public class Order{
         int s;
         System.out.print("Nhập mã hoá đơn cần tìm: ");
         s = sc.nextInt();
-        for (int i = 1; i <= 2; i++) {
+        // Tìm hoá đơn dựa theo id
+        for (int i = 1; i <= 1000; i++) {
             if (s == getId()) {
-                printOrder();
+                printOrder(s);
             }
         }
     }
 
-    public void printOrder() {
+    public void printOrder(int s) {
         // Hiển thị tất cả order
         System.out.println("----------------------");
         System.out.println("Hoá đơn thứ " + id);
@@ -172,6 +140,40 @@ public class Order{
             }
         } catch (Exception e) {
             System.out.println("Không có sản phẩm trong hoá đơn!");
+        }
+    }
+
+    public static void sortOrder() {
+        for (int i = 0; i < orderList.size() - 2; i++) {
+            for (int j = i + 1; j < orderList.size() - 1; j++) {
+                if (orderList.get(i).getTotalAmount() > orderList.get(j).getTotalAmount()) {
+                    Order order = new Order(orderList.get(i).getId(), orderList.get(i).getDate(), orderList.get(i).getCustName(), orderList.get(i).getCustPhone(), orderList.get(i).getTotalAmount(), orderList.get(i).getItemList());
+                    orderList.set(i, orderList.get(j));
+                    orderList.set(j, order);
+                }
+            }
+        }
+        for (Order order : getOrderList()) {
+            // Hiển thị tất cả order
+            System.out.println("----------------------");
+            System.out.println("Hoá đơn thứ " + order.getId());
+            System.out.printf("Khách hàng -- [%s - %s] \n", order.getCustName(), order.getCustPhone());
+            System.out.println("Tổng tiền: " + order.getTotalAmount());
+            System.out.println("Trạng thái đơn: " + (order.isStatus() == true ? "Đã duyệt" : "Chờ duyệt"));
+            // Danh sách sản phẩm trong hoá đơn
+            try {
+                System.out.println("ID\tSản phẩm\tĐơn giá\tSố lượng\tThành tiền");
+                for (OrderItem orderItem : order.itemList) {
+                    System.out.print(orderItem.getItem().getId() + "\t");
+                    System.out.print(orderItem.getItem().getName() + "\t");
+                    System.out.print(orderItem.getItem().getPrice() + "\t");
+                    System.out.print(orderItem.getQuantity() + "\t\t\t");
+                    System.out.print(orderItem.getItem().getPrice() * orderItem.getQuantity());
+                    System.out.println();
+                }
+            } catch (Exception e) {
+                System.out.println("Không có sản phẩm trong hoá đơn!");
+            }
         }
     }
 }

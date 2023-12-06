@@ -7,7 +7,7 @@ public class QueueADTImpl <T> implements QueueADT<T> {
 
     public QueueADTImpl(int capacity) {
         if(capacity <= 0) {
-            throw new RuntimeException("Có lỗi xảy ra! Sức chứa hàng đợi = 0");
+            throw new RuntimeException("Có lỗi xảy ra! Sức chứa hàng đợi bé hơn hoặc bằng 0");
         }
         this.items = new ArrayList<>();
         this.capacity = capacity;

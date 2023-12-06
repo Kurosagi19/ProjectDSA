@@ -7,9 +7,6 @@ public class Product {
     private int price;
     static List<Product> prdList;
 
-    public Product() {
-    }
-
     public Product(int id, String name, int price) {
         this.id = id;
         this.name = name;
