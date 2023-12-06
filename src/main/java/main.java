@@ -1,10 +1,15 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
 
-public class main {
+public class main{
     public static Scanner sc = new Scanner(System.in);
     private static Product prd;
+
+    static Order orderList;
+
+    static QueueADT<Order> orderQueueADT = new QueueADTImpl<>(100);
 
     public static void main(String[] args) {
         Product p1 = new Product(1, "Product 1", 1000);
@@ -14,7 +19,6 @@ public class main {
         prd.getPrdList().add(p2);
         prd.getPrdList().add(p3);
 
-        Order order = new Order(1, "05/12/2023", "Nguyen Duc Anh", "0965241610");
         mainMenu();
         int choice;
         do {
@@ -23,53 +27,19 @@ public class main {
             switch (choice) {
                 case 1:
                     System.out.println("----- TẠO HOÁ ĐƠN -----");
-                    order.addOrder();
-                    int pChoice;
-                    do {
-                        productMenu();
-                        pChoice = sc.nextInt();
-                        switch (pChoice) {
-                            case 1:
-                                int prdId;
-                                int quantity;
-                                do {
-                                    getPrdList();
-                                    System.out.print("Nhập id sản phẩm từ 1 đến 5 (nhập 0 để thoát): ");
-                                    prdId = sc.nextInt();
-                                    if (prdId == 0) {
-                                        mainMenu();
-                                    } else {
-                                        System.out.print("Nhập số lượng: ");
-                                        quantity = sc.nextInt();
-                                            for (Product p : prd.getPrdList()) {
-                                                if (prdId == p.getId()) {
-                                                    order.getItemList().add(new OrderItem(prdId, p, quantity));
-                                                }
-                                            }
-                                        if (prdId < 0 || prdId >= 6) {
-                                            System.out.println("Mã sản phẩm không hợp lệ. Mời nhập lại: ");
-                                        }
-                                    }
-                                } while (prdId != 0);
-                                order.calcTotal();
-                                pChoice = 0;
-                                break;
-                            case 0:
-                                mainMenu();
-                                break;
-                        }
-                    } while (pChoice != 0);
+                    addOrder();
                     break;
                 case 2:
-                    order.statusUpdate();
+
                     mainMenu();
                     break;
                 case 3:
                     System.out.println("----- DANH SÁCH HOÁ ĐƠN -----");
-                    order.printOrder();
+
                     mainMenu();
                     break;
                 case 4:
+
                     mainMenu();
                     break;
                 case 0:
@@ -114,4 +84,54 @@ public class main {
             System.out.println("Không có sản phẩm nào :))");
         }
     }
+
+    private static void addOrder() {
+        int id = new Random().nextInt(1000);
+        System.out.print("Ngày tạo hoá đơn: ");
+        String date = sc.nextLine();
+        System.out.print("Tên khách hàng: ");
+        String custName = sc.nextLine();
+        System.out.print("Số điện thoại khách hàng: ");
+        String custPhone = sc.nextLine();
+        Order order = new Order(id, date, custName, custPhone);
+        System.out.print("Số sản phẩm muốn thêm: ");
+        int n = sc.nextInt();
+        sc.nextLine();
+        for (int i = 0; i < n; i++) {
+            System.out.print("Product's ID: ");
+            int prdId = sc.nextInt();
+            System.out.print("Quantity: ");
+            int quantity = sc.nextInt();
+            sc.nextLine();
+            Product prd = findProductById(prdId);
+
+            if (prd != null) {
+                order.getItemList().add(new OrderItem(id, prd, quantity));
+            } else {
+                System.out.println("Product does not exist with ID: " + prdId);
+            }
+        }
+        order.calcTotal();
+        order.printOrder();
+        orderList.(order);
+        orderQueueADT.enqueue(order);
+        mainMenu();
+    }
+
+    private static Product findProductById(int prdId) {
+        for (Product p : prd.getPrdList()) {
+            if (prdId == p.getId()) {
+                return p;
+            }
+        }
+        return null;
+    }
+
+//    private static void showOrder() {
+//        for (int i = 0; i < Order.orderList.size()-2; i++){
+//            for (int j = i+1; j < Order.orderList.size()-1; j++){
+//                if (Order.)
+//            }
+//        }
+//    }
 }

@@ -1,8 +1,6 @@
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
-public class Order {
+public class Order{
     private static Scanner sc = new Scanner(System.in);
     private int id;
     private String date;
@@ -11,6 +9,11 @@ public class Order {
     private int totalAmount;
     private boolean status = false;
     private List<OrderItem> itemList;
+
+    private static Product prd;
+
+    public Order() {
+    }
 
     public Order(int id, String date, String custName, String custPhone) {
         this.id = id;
@@ -76,9 +79,6 @@ public class Order {
         this.itemList = itemList;
     }
 
-
-
-
     public void calcTotal() {
         // Tính tổng tiền
         for (OrderItem orderItem: itemList) {
@@ -86,28 +86,59 @@ public class Order {
         }
     }
     public void addOrder() {
+
         System.out.print("Nhập id hoá đơn: ");
-        id = sc.nextInt();
+        int id = sc.nextInt();
         sc.nextLine();
         System.out.print("Ngày tạo hoá đơn: ");
-        date = sc.nextLine();
+        String date = sc.nextLine();
         System.out.print("Tên khách hàng: ");
-        custName = sc.nextLine();
+        String custName = sc.nextLine();
         System.out.print("Số điện thoại khách hàng: ");
-        custPhone = sc.nextLine();
+        String custPhone = sc.nextLine();
         Order order = new Order(id, date, custName, custPhone);
-        QueueADT<Order> orderQueueADT = new QueueADTImpl<>(100);
-        orderQueueADT.enqueue(order);
+        int pChoice;
+        do {
+
+            main.productMenu();
+            pChoice = sc.nextInt();
+            switch (pChoice) {
+                case 1:
+                    int prdId;
+                    int quantity;
+                    do {
+                        main.getPrdList();
+                        System.out.print("Nhập id sản phẩm (nhập 0 để thoát): ");
+                        prdId = sc.nextInt();
+                        if (prdId == 0) {
+                            main.mainMenu();
+                        } else {
+                            System.out.print("Nhập số lượng: ");
+                            quantity = sc.nextInt();
+                            for (Product p : prd.getPrdList()) {
+                                if (prdId == p.getId()) {
+                                    order.getItemList().add(new OrderItem(prdId, p, quantity));
+                                }
+                            }
+                            if (prdId < 0 || prdId >= 6) {
+                                System.out.println("Mã sản phẩm không hợp lệ. Mời nhập lại: ");
+                            }
+                        }
+                    } while (prdId != 0);
+                    order.calcTotal();
+                    QueueADT<Order> orderQueueADT = new QueueADTImpl<>(100);
+                    orderQueueADT.enqueue(order);
+                    pChoice = 0;
+                    break;
+                case 0:
+                    main.mainMenu();
+                    break;
+            }
+        } while (pChoice != 0);
     }
 
     public void statusUpdate() {
-        QueueADT<Order> orders = new QueueADTImpl<>(100);
-        for(Order order : orders) {
-            if (order.getId() == id) {
-                order.setStatus(true);
-                break;
-            }
-        }
+
     }
 
     public void searchOrder() {
