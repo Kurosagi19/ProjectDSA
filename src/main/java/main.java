@@ -44,7 +44,7 @@ public class main{
                     break;
                 case 4:
                     System.out.println("----- TÌM KIẾM HOÁ ĐƠN -----");
-
+                    Order.searchOrder();
                     mainMenu();
                     break;
                 case 0:
@@ -110,8 +110,4 @@ public class main{
         }
         return null;
     }
-
-//    private static void showOrder() {
-
-//    }
 }
