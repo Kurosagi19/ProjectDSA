@@ -6,7 +6,7 @@ import java.util.Scanner;
 public class main{
     public static Scanner sc = new Scanner(System.in);
     private static Product prd;
-    private static final QueueADT<Order> orderQueueADT = new QueueADTImpl<>(100);
+    static final QueueADT<Order> orderQueueADT = new QueueADTImpl<>(100);
 
     public static void main(String[] args) {
         Product p1 = new Product(1, "Laptop Acer", 10000000);
@@ -28,6 +28,7 @@ public class main{
                     break;
                 case 2:
                     System.out.println("----- DUYỆT HOÁ ĐƠN -----");
+                    Order.statusUpdate();
                     mainMenu();
                     break;
                 case 3:
