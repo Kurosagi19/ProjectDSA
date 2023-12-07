@@ -12,7 +12,7 @@ public class Order {
     private boolean status = false;
     private List<OrderItem> itemList;
     private static Product prd;
-    static List<Order> orderList;
+    static List<Order> orderList = new ArrayList<>();
 
     public Order(int id, String date, String custName, String custPhone) {
         this.id = id;
@@ -20,7 +20,7 @@ public class Order {
         this.custName = custName;
         this.custPhone = custPhone;
         this.itemList = new ArrayList<>();
-        this.orderList = new ArrayList<>();
+//        this.orderList = new ArrayList<>();
     }
 
     public Order(int id, String date, String custName, String custPhone, int totalAmount, List<OrderItem> itemList) {
@@ -114,18 +114,18 @@ public class Order {
         s = sc.nextInt();
         try {
             // Tìm hoá đơn dựa theo id
-            for (int i = 1; i <= 1000; i++) {
-                if (s == orderList.get(i).getId()) {
+            for (Order order : getOrderList()) {
+                if (order.getId() == s) {
                     // Hiển thị
                     System.out.println("----------------------");
-                    System.out.println("Hoá đơn thứ " + orderList.get(s).getId());
-                    System.out.printf("Khách hàng -- [%s - %s] \n", orderList.get(s).getCustName(), orderList.get(s).getCustPhone());
-                    System.out.println("Tổng tiền: " + orderList.get(s).getTotalAmount());
-                    System.out.println("Trạng thái đơn: " + (orderList.get(s).isStatus() == true ? "Đã duyệt" : "Chờ duyệt"));
+                    System.out.println("Hoá đơn thứ " + order.getId());
+                    System.out.printf("Khách hàng -- [%s - %s] \n", order.getCustName(), order.getCustPhone());
+                    System.out.println("Tổng tiền: " + order.getTotalAmount());
+                    System.out.println("Trạng thái đơn: " + (order.isStatus() == true ? "Đã duyệt" : "Chờ duyệt"));
                     // Danh sách sản phẩm trong hoá đơn
-                    try {
+                    if (!order.getItemList().isEmpty()) {
                         System.out.println("ID\tSản phẩm\tĐơn giá\tSố lượng\tThành tiền");
-                        for (OrderItem orderItem : orderList.get(s).getItemList()) {
+                        for (OrderItem orderItem : order.getItemList()) {
                             System.out.print(orderItem.getItem().getId() + "\t");
                             System.out.print(orderItem.getItem().getName() + "\t");
                             System.out.print(orderItem.getItem().getPrice() + "\t");
@@ -133,18 +133,18 @@ public class Order {
                             System.out.print(orderItem.getItem().getPrice() * orderItem.getQuantity());
                             System.out.println();
                         }
-                    } catch (Exception e) {
-                        System.out.println("Có lỗi xảy ra!");
+                    } else {
+                        System.out.println("Không có sản phẩm trong hoá đơn!");
                     }
                 }
             }
         } catch (Exception e) {
-            System.out.println("Không thấy hoá đơn có id = " + s);
+            System.out.println("Có lỗi xảy ra!");
         }
     }
     public static void sortOrder() {
-        for (int i = 0; i < orderList.size() - 2; i++) {
-            for (int j = i + 1; j < orderList.size() - 1; j++) {
+        for (int i = 0; i <= orderList.size() - 2; i++) {
+            for (int j = i + 1; j <= orderList.size() - 1; j++) {
                 if (orderList.get(i).getTotalAmount() > orderList.get(j).getTotalAmount()) {
                     Order order = new Order(orderList.get(i).getId(), orderList.get(i).getDate(), orderList.get(i).getCustName(), orderList.get(i).getCustPhone(), orderList.get(i).getTotalAmount(), orderList.get(i).getItemList());
                     orderList.set(i, orderList.get(j));
@@ -160,7 +160,7 @@ public class Order {
             System.out.println("Tổng tiền: " + order.getTotalAmount());
             System.out.println("Trạng thái đơn: " + (order.isStatus() == true ? "Đã duyệt" : "Chờ duyệt"));
             // Danh sách sản phẩm trong hoá đơn
-            try {
+            if (!order.getItemList().isEmpty()) {
                 System.out.println("ID\tSản phẩm\tĐơn giá\tSố lượng\tThành tiền");
                 for (OrderItem orderItem : order.itemList) {
                     System.out.print(orderItem.getItem().getId() + "\t");
@@ -170,7 +170,7 @@ public class Order {
                     System.out.print(orderItem.getItem().getPrice() * orderItem.getQuantity());
                     System.out.println();
                 }
-            } catch (Exception e) {
+            } else {
                 System.out.println("Không có sản phẩm trong hoá đơn!");
             }
         }
